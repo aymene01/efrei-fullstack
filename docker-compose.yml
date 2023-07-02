@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  database:
+    container_name: efrei-app-api-db
+    hostname: efrei-app-api-postgres
+    image: postgres:14.2
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database

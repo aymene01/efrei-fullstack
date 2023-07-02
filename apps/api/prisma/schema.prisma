@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  uuid              String   @id @default(uuid())
+  email             String   @unique
+  encryptedPassword String
+  role              Role     @default(USER)
+}
+
+model Teacher {
+  uuid     String  @id @default(uuid())
+  name     String
+  email    String
+  password String
+  userUuid String  @unique
+}
+
+model Student {
+  uuid      String  @id @default(uuid())
+  name      String
+  email     String  @unique
+  password  String
+  class     Class   @relation(fields: [classUuid], references: [uuid])
+  classUuid String
+  grades    Grade[]
+}
+
+model Class {
+  uuid        String    @id @default(uuid())
+  name        String
+  students    Student[]
+}
+
+model Grade {
+  uuid        String  @id @default(uuid())
+  value       Int
+  student     Student @relation(fields: [studentUuid], references: [uuid])
+  studentUuid String
+}
+
+enum Role {
+  USER
+  ADMIN
+}
